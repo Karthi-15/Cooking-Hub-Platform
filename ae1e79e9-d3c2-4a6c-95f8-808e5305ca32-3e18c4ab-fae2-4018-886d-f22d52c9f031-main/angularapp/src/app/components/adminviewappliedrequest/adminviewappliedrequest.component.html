@@ -1,0 +1,225 @@
+<div class="container mx-auto pt-27 px-4 py-8 max-w-7xl">
+  <!-- Header Section -->
+  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8">
+    <h1 class="text-3xl font-bold text-[#8B4513] mb-4 sm:mb-0">Class Requests for Approval</h1>
+    
+    <!-- Search and Filter Section -->
+    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+      <!-- Search Input -->
+      <div class="relative">
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (input)="search()" 
+          placeholder="Search by class name..." 
+          class="border border-[#DAA520]/30 rounded-lg block w-full sm:w-64 px-3 py-2.5 text-sm text-[#8B4513]
+                 bg-[#FFF8DC]/80 backdrop-blur-md placeholder:text-[#B5A671]
+                 focus:outline-none focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent
+                 transition duration-150 ease-in-out"
+        >
+        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+          <svg class="h-5 w-5 text-[#DAA520]" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+          </svg>
+        </div>
+      </div>
+      
+      <!-- Status Filter -->
+      <select 
+        [(ngModel)]="statusFilter" 
+        (change)="applyFilters()" 
+        class="border border-[#DAA520]/30 rounded-lg block w-full sm:w-48 px-3 py-2.5 text-sm text-[#8B4513]
+               bg-[#FFF8DC]/80 cursor-pointer placeholder:text-[#B5A671]
+               focus:outline-none focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent
+               transition duration-150 ease-in-out appearance-none"
+      >
+        <option value="">All Status</option>
+        <option value="Pending">Pending</option>
+        <option value="Approved">Approved</option>
+        <option value="Rejected">Rejected</option>
+      </select>
+    </div>
+  </div>
+  
+  <!-- Loading State -->
+  <div *ngIf="loading" class="bg-white rounded-lg shadow-lg p-8 text-center">
+    <iframe class="mx-auto" src="https://lottie.host/embed/7b59104f-5872-4013-b910-b5ed815594a2/JptQEYQbMT.lottie"></iframe>
+    <p class="mt-4 text-lg font-medium text-[#8B4513]">Loading requests...</p>
+  </div>
+  
+  <!-- Error State -->
+  <div *ngIf="!loading && error" class="bg-[#F3CA52]/20 border border-[#DAA520] text-[#8B4513] px-6 py-4 rounded-lg shadow-sm" role="alert">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-[#DAA520]" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <div class="ml-3">
+        <p class="font-medium">{{ error }}</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Table Section -->
+  <div *ngIf="!loading && !error">
+    <!-- No Results State -->
+    <div *ngIf="filteredRequests.length === 0" class="bg-[#FFF8DC] rounded-lg shadow-lg p-8 text-center">
+      <svg class="mx-auto h-12 w-12 text-[#DAA520]" fill="none" viewBox="0 0 24 24" stroke="#DAA520">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      <p class="mt-4 text-lg font-medium text-[#8B4513]">No requests found</p>
+      <p class="mt-1 text-sm text-[#B5A671]">Try adjusting your search or filter to find what you're looking for.</p>
+    </div>
+    
+    <!-- Table -->
+    <div *ngIf="filteredRequests.length > 0" class="bg-[#FFF8DC]/80 rounded-xl shadow-xl overflow-hidden ring-2 ring-[#DAA520]/10 backdrop-blur-md animate-fade-in">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-[#DAA520]/30">
+          <thead class="bg-[#F3CA52]/40">
+            <tr>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-[#6B8E23] uppercase tracking-wider">Class Name</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-[#6B8E23] uppercase tracking-wider">User</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-[#6B8E23] uppercase tracking-wider">Request Date</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-[#6B8E23] uppercase tracking-wider">Status</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-[#6B8E23] uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-[#FFF8DC]/60 divide-y divide-[#DAA520]/20">
+            <tr *ngFor="let request of paginatedClasses()" class="group transition duration-300 ease-in-out hover:bg-[#F9E5B7] hover:shadow-lg animate-slideUp">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-[#8B4513]">{{ request.cookingClass?.className }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-[#8B4513]">{{ request.username }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-[#8B4513]">{{ request.requestDate | date: 'MMM d, yyyy' }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span [ngClass]="{
+                  'bg-[#FFF8DC] text-[#DAA520]': request.status === 'Pending',
+                  'bg-green-100 text-green-800': request.status === 'Approved',
+                  'bg-red-100 text-red-800': request.status === 'Rejected'
+                }" class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full shadow">
+                  {{ request.status }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2">
+                <button 
+                  (click)="viewProfile(request)" 
+                  class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs rounded-md text-[#FFF8DC] bg-[#6B8E23] hover:bg-[#58801A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6B8E23] transition duration-150 ease-in-out mr-2"
+                >
+                  View Profile
+                </button>
+                <ng-container *ngIf="request.status === 'Pending'">
+                  <button (click)="confirmAndUpdateStatus(request.cookingClassRequestId, 'Approved')" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs rounded-md text-[#FFF8DC] bg-[#6B8E23] hover:bg-[#58801A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6B8E23] transition duration-150 ease-in-out mr-2"
+                  >Approve</button>
+                  <button (click)="confirmAndUpdateStatus(request.cookingClassRequestId, 'Rejected')" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out"
+                  >Reject</button>
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Pagination Controls -->
+    <div *ngIf="filteredRequests.length > itemsPerPage" class="flex justify-center mt-6 space-x-2">
+      <button 
+        (click)="prevPage()" 
+        [disabled]="currentPage === 1"
+        class="px-3 py-1 rounded border border-[#DAA520] bg-[#FFF8DC] text-[#8B4513] hover:bg-[#F3CA52]/40 disabled:opacity-50"
+      >
+        Previous
+      </button>
+      <ng-container *ngFor="let page of getPageArray()">
+        <button
+          (click)="goToPage(page)"
+          [class.font-bold]="page === currentPage"
+          class="px-3 py-1 rounded border border-[#DAA520] bg-[#FFF8DC] text-[#8B4513] hover:bg-[#F3CA52]/40"
+        >
+          {{ page }}
+        </button>
+      </ng-container>
+      <button 
+        (click)="nextPage()" 
+        [disabled]="currentPage === totalPages"
+        class="px-3 py-1 rounded border border-[#DAA520] bg-[#FFF8DC] text-[#8B4513] hover:bg-[#F3CA52]/40 disabled:opacity-50"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Enhanced Profile Modal -->
+<div *ngIf="showProfileModal && selectedRequest" class="fixed inset-0 backdrop-blur-sm flex justify-center items-center p-4 z-50">
+  <div class="relative bg-[#FFF8DC] rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+    <!-- Modal Header -->
+    <div class="px-6 py-4 border-b border-[#DAA520]/40 flex justify-between items-center">
+      <h3 class="text-xl font-semibold text-[#8B4513]">Request Details</h3>
+      <button 
+        class="rounded-full p-1 text-[#6B8E23] hover:text-[#4a6213] hover:bg-[#FFF8DC] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6B8E23] transition duration-150 ease-in-out"
+        (click)="closeProfileModal()"
+      >
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="#6B8E23">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <!-- Modal Content -->
+    <div class="px-6 py-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- User Information -->
+        <div class="border border-[#DAA520]/40 rounded-lg p-5 bg-[#FFF8DC]/80">
+          <h4 class="text-sm font-semibold text-[#6B8E23] mb-3 uppercase tracking-wide">User Information</h4>
+          <div class="space-y-2 text-[#8B4513]">
+            <p class="text-sm"><span class="font-medium">Username:</span> {{ selectedRequest.username }}</p>
+            <p class="text-sm"><span class="font-medium">Email:</span> {{ selectedRequest.email }}</p>
+            <p class="text-sm"><span class="font-medium">Mobile:</span> {{ selectedRequest.mobile }}</p>
+          </div>
+        </div>
+        <!-- Class Information -->
+        <div class="border border-[#DAA520]/40 rounded-lg p-5 bg-[#FFF8DC]/80">
+          <h4 class="text-sm font-semibold text-[#6B8E23] mb-3 uppercase tracking-wide">Class Information</h4>
+          <div class="space-y-2 text-[#8B4513]">
+            <p class="text-sm"><span class="font-medium">Class Name:</span> {{ selectedRequest.cookingClass?.className }}</p>
+            <p class="text-sm"><span class="font-medium">Chef:</span> {{ selectedRequest.cookingClass?.chefName }}</p>
+            <p class="text-sm"><span class="font-medium">Location:</span> {{ selectedRequest.cookingClass?.location }}</p>
+            <p class="text-sm"><span class="font-medium">Fee:</span> {{ selectedRequest.cookingClass?.fee | currency }}</p>
+          </div>
+        </div>
+      </div>
+      <!-- Request Details -->
+      <div class="mt-6 border border-[#DAA520]/40 rounded-lg p-5 bg-[#FFF8DC]/80">
+        <h4 class="text-sm font-semibold text-[#6B8E23] mb-3 uppercase tracking-wide">Request Details</h4>
+        <div class="space-y-2 text-[#8B4513]">
+          <p class="text-sm"><span class="font-medium">Request Date:</span> {{ selectedRequest.requestDate | date: 'MMM d, yyyy' }}</p>
+          <p class="text-sm">
+            <span class="font-medium">Status:</span>
+            <span [ngClass]="{
+              'text-[#DAA520]': selectedRequest.status === 'Pending',
+              'text-green-700': selectedRequest.status === 'Approved',
+              'text-red-700': selectedRequest.status === 'Rejected'
+            }" class="font-medium">
+              {{ selectedRequest.status }}
+            </span>
+          </p>
+          <p class="text-sm"><span class="font-medium">Dietary Preferences:</span> {{ selectedRequest.dietaryPreferences }}</p>
+          <p class="text-sm"><span class="font-medium">Cooking Goals:</span> {{ selectedRequest.cookingGoals }}</p>
+          <p *ngIf="selectedRequest.comments" class="text-sm"><span class="font-medium">Comments:</span> {{ selectedRequest.comments }}</p>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Footer -->
+    <div class="px-6 py-4 border-t border-[#DAA520]/40 bg-[#FFF8DC]/80 rounded-b-lg flex justify-end">
+      <button 
+        class="inline-flex justify-center px-6 py-2 border border-[#DAA520] rounded-md shadow-sm text-sm font-medium text-[#8B4513] bg-[#FFF8DC] hover:bg-[#F3CA52]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DAA520] transition duration-150 ease-in-out"
+        (click)="closeProfileModal()"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

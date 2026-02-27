@@ -1,0 +1,100 @@
+<div class="flex flex-col items-center justify-center min-h-screen bg-[url('../assets/doodle.png')] bg-cover bg-center px-6 py-32">
+  <div class="w-full max-w-md bg-[#FFF8DC]/30 backdrop-blur-xl rounded-xl shadow-2xl border border-[#DAA520]/40 ring-2 ring-[#6B8E23]/20 font-bold transition duration-700 ease-out hover:scale-105 hover:ring-[#6B8E23]/40">
+    <div class="space-y-6 p-8">
+      <h1 class="text-[#6B8E23] text-2xl drop-shadow-lg animate-fade-in">
+        Cooking Hub
+      </h1>
+      <p class="mt-2 text-sm text-[#8B4513] animate-fade-in-slow">
+        Please sign in to your account
+      </p>
+
+      <form class="space-y-4 md:space-y-6" [formGroup]="loginForm" (ngSubmit)="onSubmit($event)">
+        <div class="mb-4 group">
+          <label for="email" class="block mb-2 text-sm text-[#6B8E23]">Email address</label>
+          <input id="email" name="email" type="email" formControlName="Email"
+            class="border border-[#6B8E23]/40 rounded-lg block w-full p-2.5 text-sm outline-none bg-white/30 backdrop-blur-md focus:ring-2 focus:ring-[#6B8E23] focus:bg-white/50 shadow-sm transition duration-300 ease-in-out group-hover:scale-105"
+            placeholder="Email address">
+          <div *ngIf="loginForm.get('Email')?.invalid && loginForm.get('Email')?.touched"
+            class="text-red-500 text-xs mt-1 animate-pulse">
+            <span *ngIf="loginForm.get('Email')?.errors?.required">Email is required</span>
+            <span *ngIf="loginForm.get('Email')?.errors?.email">Please enter a valid email</span>
+          </div>
+        </div>
+
+        <div class="mb-4 group relative">
+          <label for="password" class="block mb-2 text-sm text-[#6B8E23]">Password</label>
+          
+          <input
+            id="password"
+            name="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="Password"
+            class="border border-[#6B8E23]/40 rounded-lg block w-full p-2.5 text-sm outline-none bg-white/30 backdrop-blur-md focus:ring-2 focus:ring-[#6B8E23] focus:bg-white/50 shadow-sm transition duration-300 ease-in-out group-hover:scale-105"
+            placeholder="Password"
+          />
+        
+          <!-- Toggle Button -->
+          <button
+            type="button"
+            (click)="showPassword = !showPassword"
+            class="absolute right-3 top-9 text-xs text-[#6B8E23] bg-white/40 px-2 py-0.5 rounded focus:outline-none hover:text-[#5A7618] transition duration-200"
+          >
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </button>
+</div>
+
+        <div class="mb-4 group">
+          <label for="captcha" class="block mb-2 text-sm text-[#6B8E23]">Security Check</label>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-[#8B4513] font-medium animate-fade-in-fast">What is {{ captchaQuestion }}?</span>
+          </div>
+          <br>
+          <input
+            id="captcha"
+            name="captcha"
+            type="text"
+            formControlName="captchaAnswer"
+            class="border border-[#6B8E23]/40 rounded-lg block w-full p-2.5 text-sm outline-none bg-white/30 focus:ring-2 focus:ring-[#6B8E23] focus:bg-white/50 shadow-sm transition duration-300 ease-in-out group-hover:scale-105"
+            placeholder="Your answer"
+          />
+          <div *ngIf="captchaInvalid" class="text-red-500 text-xs mt-1 animate-pulse">
+            <span><i class="fas fa-exclamation-circle mr-1"></i>Incorrect answer. Please try again.</span>
+          </div>
+          <div *ngIf="loginForm.get('captchaAnswer')?.invalid && loginForm.get('captchaAnswer')?.touched"
+               class="text-red-500 text-xs mt-1 animate-pulse">
+            <span><i class="fas fa-exclamation-circle mr-1"></i>CAPTCHA is required.</span>
+          </div>
+        </div>
+
+        <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative animate-fade-in">
+          <span class="block sm:inline">{{ errorMessage }}</span>
+        </div>
+
+        <div>
+          <button type="submit" [disabled]="submitting"
+            class="group relative w-full flex justify-center bg-[#6B8E23]/80 px-5 py-2.5 text-sm font-medium rounded-md text-[#FFF8DC] hover:bg-[#6B8E23]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6B8E23] transition-all duration-300 ease-in-out shadow-lg hover:scale-105 hover:shadow-xl active:scale-95">
+            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+              <svg class="h-5 w-5 text-[#DAA520] group-hover:text-[#FFD700] transition duration-300"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20" fill="white" aria-hidden="true">
+                <path fill-rule="evenodd"
+                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                  clip-rule="evenodd" />
+              </svg>
+            </span>
+            {{ submitting ? 'Signing in...' : 'Login' }}
+          </button>
+        </div>
+
+        <div class="text-center mt-4">
+          <p class="text-sm text-[#8B4513] animate-fade-in-slow">
+            Don't have an account?
+            <a routerLink="/register" class="font-medium text-[#6B8E23] hover:text-[#5A7618] transition-all duration-300 underline underline-offset-4">
+              Register here
+            </a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

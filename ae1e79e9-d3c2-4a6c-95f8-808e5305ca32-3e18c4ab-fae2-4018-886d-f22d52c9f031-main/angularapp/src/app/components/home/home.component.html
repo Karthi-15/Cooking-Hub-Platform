@@ -1,0 +1,227 @@
+<div class="py-27 px-6 relative" style="background-color: #FFFAF0;">
+
+  <!-- Hero Section -->
+  <div class="flex justify-between items-center animate-fadeIn animate-delay-100" style="background-color: #FFFAF0;">
+    <div class="max-w-xl mx-auto w-[60%] animate-slideUp animate-delay-200">
+      <h1 class="text-6xl font-bold" style="color: #8B4513;">
+        Welcome to Cooking Hub {{ username }}!
+      </h1>
+      <p class="mt-6 font-medium text-xl animate-slideUp animate-delay-300" style="color: #8B4513;">
+        Spice up your skills and stir up some fun! Whether you're flipping your first pancake or mastering gourmet magic, our expert-led classes are your recipe for delicious adventures. We have something for everyone.
+      </p>
+      <a routerLink="/register">
+        <button
+          class="mt-8 py-3 px-6 rounded-lg text-lg font-semibold animate-fadeIn animate-delay-400"
+          style="background-color: #6B8E23; color: #FFF8DC;"
+        >
+          Let the Flavor Quest Begin!
+        </button>
+      </a>
+    </div>
+    <div class="w-[35%] animate-fadeIn animate-delay-300">
+      <iframe class="w-full h-108" src="https://lottie.host/embed/86b9b895-b55d-4e19-866f-a8c152486958/gFAVZ0hNr5.lottie"></iframe>
+    </div>
+  </div>
+
+  <!-- Stats Section for Animation -->
+  <section #statsSection class="max-w-6xl mx-auto mt-20 flex justify-around text-4xl font-bold" style="color: #8B4513;">
+    <!-- Add stats content here -->
+  </section>
+
+  <!-- Hero Video Section -->
+  <section class="max-w-6xl mx-auto my-20 px-6">
+    <h2 class="text-4xl font-bold text-center mb-12" style="color: #8B4513;">Explore Flavors That Inspire You</h2>
+    <div class="relative mx-auto w-[320px] h-[320px] md:w-[400px] md:h-[400px] rounded-full shadow-lg flex flex-wrap justify-center items-center gap-6" style="background-color: #FFF8DC;">
+      <button title="Italian Cuisine" class="w-28 h-28 rounded-full text-white font-semibold hover:bg-red-500 transition flex items-center justify-center cursor-pointer shadow-lg" style="background-color: #DA3B2B;">
+        Italian
+      </button>
+      <button title="Asian Cuisine" class="w-28 h-28 rounded-full text-[#8B4513] font-semibold hover:bg-yellow-500 transition flex items-center justify-center cursor-pointer shadow-lg" style="background-color: #F5DEB3;">
+        Asian
+      </button>
+      <button title="Fresh Herbs" class="w-28 h-28 rounded-full text-white font-semibold hover:bg-green-700 transition flex items-center justify-center cursor-pointer shadow-lg" style="background-color: #6B8E23;">
+        Fresh Herbs
+      </button>
+      <button title="Spices" class="w-28 h-28 rounded-full text-white font-semibold hover:bg-orange-500 transition flex items-center justify-center cursor-pointer shadow-lg" style="background-color: #FF8C00;">
+        Spices
+      </button>
+      <button title="Desserts" class="w-28 h-28 rounded-full text-white font-semibold hover:bg-pink-500 transition flex items-center justify-center cursor-pointer shadow-lg" style="background-color: #FF69B4;">
+        Desserts
+      </button>
+      <button title="Vegan" class="w-28 h-28 rounded-full text-[#8B4513] font-semibold hover:bg-green-400 transition flex items-center justify-center cursor-pointer shadow-lg" style="background-color: #ADFF2F;">
+        Vegan
+      </button>
+      <div class="absolute inset-0 m-auto w-24 h-24 rounded-full shadow-lg flex items-center justify-center font-bold cursor-default" style="background-color: #6B8E23; color: #FFF8DC;">
+        Flavors
+      </div>
+    </div>
+  </section>
+
+  <!-- Eco-Friendly Cooking Tips -->
+  <section class="max-w-5xl mx-auto my-20 px-6 rounded-3xl shadow-lg py-16" style="background-color: #FFF8DC; color: #8B4513;">
+    <h2 class="text-4xl font-bold text-center mb-12">Eco-Friendly Cooking Tips 🌿</h2>
+    <ul class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+      <li class="p-6 bg-white rounded-2xl shadow hover:scale-105 transition cursor-pointer" style="color: #8B4513;">
+        <h3 class="text-xl font-semibold mb-3">Use Seasonal Ingredients</h3>
+        <p>Choose fruits and veggies in season to lower environmental impact and maximize flavor.</p>
+      </li>
+      <li class="p-6 bg-white rounded-2xl shadow hover:scale-105 transition cursor-pointer" style="color: #8B4513;">
+        <h3 class="text-xl font-semibold mb-3">Reduce Food Waste</h3>
+        <p>Plan meals and get creative with leftovers to save food and resources.</p>
+      </li>
+      <li class="p-6 bg-white rounded-2xl shadow hover:scale-105 transition cursor-pointer" style="color: #8B4513;">
+        <h3 class="text-xl font-semibold mb-3">Support Local Farms</h3>
+        <p>Buy local produce to support communities and reduce carbon footprint.</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Cards Section -->
+  <h2 class="text-3xl font-bold text-center mb-12" style="color: #8B4513;">
+    <span *ngIf="isAdmin">Admin Dashboard</span>
+    <span *ngIf="!isAdmin">Explore & Track</span>
+  </h2>
+
+  <section class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-12 mb-24">
+    <!-- Card 1 -->
+    <article class="scroll-animate rounded-2xl shadow-lg p-8 cursor-pointer focus:outline-none focus:ring-4 transform transition-transform hover:scale-105 hover:shadow-xl" style="background-color: #FFFFFF; color: #8B4513; border: 1px solid #FFF8DC;">
+      <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full" style="background-color: #FFF8DC; color: #6B8E23;">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-10 h-10" aria-hidden="true">
+          <path d="M12 2L15 8l6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 9l6-1 3-6z" />
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold mb-2">
+        <span *ngIf="isAdmin">Manage Cooking Classes</span>
+        <span *ngIf="!isAdmin">Explore Cooking Classes</span>
+      </h3>
+      <p class="leading-relaxed mb-4">
+        <span *ngIf="isAdmin">Create, edit, and manage cooking classes to offer the best experience to our users.</span>
+        <span *ngIf="!isAdmin">Browse professional classes by expert chefs to elevate your cooking skills.</span>
+      </p>
+      <a *ngIf="isAdmin" routerLink="/admin/view-class" class="font-semibold hover:underline focus:outline-none focus:ring-2" style="color: #6B8E23;">View Classes</a>
+      <a *ngIf="!isAdmin" routerLink="/user/view-classes" class="font-semibold hover:underline focus:outline-none focus:ring-2" style="color: #6B8E23;">Browse Classes</a>
+    </article>
+    
+    <!-- Card 2 -->
+    <article class="scroll-animate rounded-2xl shadow-lg p-8 cursor-pointer focus:outline-none focus:ring-4 transform transition-transform hover:scale-105 hover:shadow-xl" style="background-color: #FFFFFF; color: #8B4513; border: 1px solid #FFF8DC;">
+      <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full" style="background-color: #FFF8DC; color: #6B8E23;">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-10 h-10" aria-hidden="true">
+          <path d="M9 17v-2a2 2 0 1 1 4 0v2m-2-6v2" />
+          <circle cx="12" cy="12" r="10" />
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold mb-2">
+        <span *ngIf="isAdmin">Manage Class Requests</span>
+        <span *ngIf="!isAdmin">Track Your Enrollments</span>
+      </h3>
+      <p class="leading-relaxed mb-4">
+        <span *ngIf="isAdmin">Review and manage class requests from users and update their status.</span>
+        <span *ngIf="!isAdmin">Keep track of your class status and upcoming sessions.</span>
+      </p>
+      <a *ngIf="isAdmin" routerLink="/admin/view-requests" class="font-semibold hover:underline focus:outline-none focus:ring-2" style="color: #6B8E23;">View Requests</a>
+      <a *ngIf="!isAdmin" routerLink="/user/applied-requests" class="font-semibold hover:underline focus:outline-none focus:ring-2" style="color: #6B8E23;">My Enrollments</a>
+    </article>
+
+    <!-- Card 3 -->
+    <article class="scroll-animate rounded-2xl shadow-lg p-8 cursor-pointer focus:outline-none focus:ring-4 transform transition-transform hover:scale-105 hover:shadow-xl" style="background-color: #FFFFFF; color: #8B4513; border: 1px solid #FFF8DC;">
+      <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full" style="background-color: #FFF8DC; color: #6B8E23;">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-10 h-10" aria-hidden="true">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z" />
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold mb-2">
+        <span *ngIf="isAdmin">User Feedback</span>
+        <span *ngIf="!isAdmin">Share Your Experience</span>
+      </h3>
+      <p class="leading-relaxed mb-4">
+        <span *ngIf="isAdmin">View feedback from users to improve our cooking classes and services.</span>
+        <span *ngIf="!isAdmin">Tell us your thoughts and help improve Cooking Hub.</span>
+      </p>
+      <a *ngIf="isAdmin" routerLink="/admin/view-feedback" class="font-semibold hover:underline focus:outline-none focus:ring-2" style="color: #6B8E23;">View Feedback</a>
+      <a *ngIf="!isAdmin" routerLink="/user/add-feedback" class="font-semibold hover:underline focus:outline-none focus:ring-2" style="color: #6B8E23;">Give Feedback</a>
+    </article>
+  </section>
+
+  <!-- Feature Highlights Section -->
+  <h2 class="text-3xl font-bold text-center mb-12" style="color: #8B4513;">Feature Highlights</h2>
+  <section class="max-w-7xl mx-auto px-8 py-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-14">
+    <div class="scroll-animate relative rounded-3xl shadow-lg p-8 flex flex-col items-center text-center cursor-pointer border border-white/50 hover:bg-white/60 hover:glowPulse transform transition duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4" style="background-color: rgba(255, 255, 255, 0.4); color: #8B4513;">
+      <div class="mb-6 w-36 h-36 flex items-center justify-center">
+        <iframe src="https://lottie.host/embed/839516aa-0b79-412e-9b17-c34c0d415c03/EBMEUUnR2i.lottie" aria-hidden="true" frameborder="0" scrolling="no"></iframe>
+      </div>
+      <h3 class="font-extrabold text-2xl mb-2">Expert Recipes</h3>
+      <p class="text-base max-w-xs leading-relaxed">
+        Discover recipes crafted by culinary experts to elevate your cooking skills.
+      </p>
+    </div>
+
+    <div class="scroll-animate relative rounded-3xl shadow-lg p-8 flex flex-col items-center text-center cursor-pointer border border-white/50 hover:bg-white/60 hover:glowPulse transform transition duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4" style="background-color: rgba(255, 255, 255, 0.4); color: #8B4513;">
+      <div class="mb-6 w-36 h-36">
+        <iframe src="https://lottie.host/embed/931cc6f3-952d-49dc-a5c3-2ab811cd08e3/5KBvc64lTy.lottie" class="w-full h-full" aria-hidden="true" frameborder="0" scrolling="no"></iframe>
+      </div>
+      <h3 class="font-extrabold text-2xl mb-2">Live Workshops</h3>
+      <p class="text-base max-w-xs leading-relaxed">
+        Join interactive workshops hosted by professional chefs worldwide.
+      </p>
+    </div>
+
+    <div class="scroll-animate relative rounded-3xl shadow-lg p-8 flex flex-col items-center text-center cursor-pointer border border-white/50 hover:bg-white/60 hover:glowPulse transform transition duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-4" style="background-color: rgba(255, 255, 255, 0.4); color: #8B4513;">
+      <div class="mb-6 w-36 h-36">
+        <iframe src="https://lottie.host/embed/63a01c7a-b9b1-411d-88c5-712e9d396b69/dU48rOKAQI.lottie" class="w-full h-full" aria-hidden="true" frameborder="0" scrolling="no"></iframe>
+      </div>
+      <h3 class="font-extrabold text-2xl mb-2">Cooking Resources</h3>
+      <p class="text-base max-w-xs leading-relaxed">
+        Access a treasure trove of cooking tips, guides, and must-know techniques.
+      </p>
+    </div>
+  </section>
+
+  <!-- Cravings Section -->
+  <div class="text-center mb-12">
+    <h1 class="text-4xl font-bold mb-3" style="color: #8B4513;">What are you craving for?</h1>
+    <p class="text-gray-600 text-lg">Pick your favorite and start cooking magic ✨</p>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-10 max-w-6xl mx-auto">
+    <!-- Veg Pizza -->
+    <div class="scroll-animate group flex flex-col items-center cursor-pointer transform transition hover:scale-110">
+      <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-[#FFF8DC] shadow-md group-hover:shadow-xl transition">
+        <img src="https://cdn.jflimages.co.in/nextgen-catalog/media/prod/Dominos/CategoriesV1/23bced69-47ec-48ea-89d7-1b5a68d29bb6_VegPizza.png?ver=V0.0.1" alt="Veg Pizza" class="w-full h-full object-cover group-hover:scale-110 transition duration-300" />
+      </div>
+      <span class="mt-3 text-base font-semibold" style="color: #8B4513;">Veg Pizza</span>
+    </div>
+
+    <!-- Garlic Bread -->
+    <div class="scroll-animate group flex flex-col items-center cursor-pointer transform transition hover:scale-110">
+      <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-[#FFF8DC] shadow-md group-hover:shadow-xl transition">
+        <img src="https://cdn.jflimages.co.in/nextgen-catalog/media/prod/Dominos/CategoriesV1/76ea3002-6964-4834-9d90-bb602184577c_garlicbread.jpg?ver=V0.0.1" alt="Garlic Bread" class="w-full h-full object-cover group-hover:scale-110 transition duration-300" />
+      </div>
+      <span class="mt-3 text-base font-semibold" style="color: #8B4513;">Garlic Bread</span>
+      <span class="text-xs text-yellow-500">New Flavours</span>
+    </div>
+
+    <!-- Cheese Volcano -->
+    <div class="scroll-animate group flex flex-col items-center cursor-pointer transform transition hover:scale-110">
+      <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-[#FFF8DC] shadow-md group-hover:shadow-xl transition">
+        <img src="https://cdn.jflimages.co.in/nextgen-catalog/media/prod/Dominos/CategoriesV1/d4426039-5b76-45a9-8940-fc268f2fbab5_cheesevolcano.jpg?ver=V0.0.1" alt="Cheese Volcano" class="w-full h-full object-cover group-hover:scale-110 transition duration-300" />
+      </div>
+      <span class="mt-3 text-base font-semibold" style="color: #8B4513;">Cheese Volcano</span>
+      <span class="text-xs text-orange-500">NEW</span>
+    </div>
+
+    <!-- Desserts -->
+    <div class="scroll-animate group flex flex-col items-center cursor-pointer transform transition hover:scale-110">
+      <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-[#FFF8DC] shadow-md group-hover:shadow-xl transition">
+        <img src="https://cdn.jflimages.co.in/nextgen-catalog/media/prod/Dominos/CategoriesV1/09d84743-6fb5-42eb-9ced-43b68fba3986_olddesertssss.png?ver=V0.0.1" alt="Desserts" class="w-full h-full object-cover group-hover:scale-110 transition duration-300" />
+      </div>
+      <span class="mt-3 text-base font-semibold" style="color: #8B4513;">Desserts</span>
+    </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top"
+    class="fixed bottom-16 right-8 py-3 px-4 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 hover:bg-green-800 focus:outline-none focus:ring-4 z-[1000]"
+    aria-label="Back to Top" style="background-color: #6B8E23; color: #FFF8DC;">
+    ↑
+  </button>
+
+</div>

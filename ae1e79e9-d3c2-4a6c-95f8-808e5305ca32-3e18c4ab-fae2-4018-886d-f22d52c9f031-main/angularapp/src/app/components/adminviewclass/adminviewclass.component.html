@@ -1,0 +1,214 @@
+<div class="container mx-auto pt-27 px-4 py-8 max-w-7xl">
+
+  <!-- Header Section -->
+  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+    <h1 class="text-3xl font-bold text-[#8B4513]">Cooking Classes</h1>
+    <div class="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+      <!-- Search Input -->
+      <div class="relative">
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (input)="search()" 
+          placeholder="Search by class name..." 
+          class="border border-[#DAA520]/30 rounded-lg block w-full sm:w-64 pl-10 pr-4 py-2.5 text-sm text-[#8B4513]
+                 bg-[#FFF8DC]/80 backdrop-blur-md placeholder:text-[#B5A671]
+                 focus:outline-none focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent
+                 transition duration-150 ease-in-out"
+        >
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg class="h-5 w-5 text-[#DAA520]" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+          </svg>
+        </div>
+      </div>
+      
+      <!-- Refresh Button -->
+      <button 
+        onclick="window.location.reload();"
+        class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg 
+               text-[#FFF8DC] bg-[#6B8E23] hover:bg-[#58801A] focus:outline-none focus:ring-2 focus:ring-offset-2 
+               focus:ring-[#6B8E23] transition duration-150 ease-in-out"
+      >
+        <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="#FFF8DC">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        Refresh
+      </button>
+    </div>
+  </div>
+  
+  <!-- Loading State -->
+  <div *ngIf="loading" class="bg-white rounded-lg shadow-lg p-8 text-center">
+    <iframe class="mx-auto" src="https://lottie.host/embed/7b59104f-5872-4013-b910-b5ed815594a2/JptQEYQbMT.lottie"></iframe>
+    <p class="mt-4 text-lg font-medium text-[#8B4513]">Loading classes...</p>
+  </div>
+  
+  <!-- Error State -->
+  <div *ngIf="!loading && error" class="bg-[#F3CA52]/20 border border-[#DAA520] text-[#8B4513] px-6 py-4 rounded-lg shadow-sm" role="alert">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-[#DAA520]" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <div class="ml-3">
+        <p class="font-medium">{{ error }}</p>
+      </div>
+    </div>
+  </div>
+
+  
+  
+  <!-- Table Section -->
+  <div *ngIf="!loading && !error">
+    <!-- Empty State -->
+    <div *ngIf="filteredClasses.length === 0" class="bg-[#FFF8DC] rounded-lg shadow-lg p-8 text-center">
+      <svg class="mx-auto h-12 w-12 text-[#DAA520]" fill="none" viewBox="0 0 24 24" stroke="#DAA520">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <p class="mt-4 text-lg font-medium text-[#8B4513]">No records found</p>
+      <p class="mt-1 text-sm text-[#B5A671]">Try adjusting your search to find what you're looking for.</p>
+    </div>
+    
+    <!-- Table -->
+    <div *ngIf="filteredClasses.length > 0" class="bg-[#FFF8DC]/85 rounded-xl shadow-xl overflow-hidden ring-2 ring-[#DAA520]/10 backdrop-blur-md animate-fade-in">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-[#DAA520]/30">
+          <thead class="bg-[#F3CA52]/40">
+            <tr>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-[#6B8E23] uppercase tracking-wider">Class Name</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-[#6B8E23] uppercase tracking-wider">Chef Name</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-[#6B8E23] uppercase tracking-wider">Location</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-[#6B8E23] uppercase tracking-wider">Duration</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-[#6B8E23] uppercase tracking-wider">Fee</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-[#6B8E23] uppercase tracking-wider">Skill Level</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-[#6B8E23] uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-[#FFF8DC]/60 divide-y divide-[#DAA520]/20">
+            <tr 
+              *ngFor="let cookingClass of paginatedClasses()" 
+              class="group transition duration-300 ease-in-out hover:bg-[#F9E5B7] hover:shadow-lg animate-slideUp"
+            >
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-[#8B4513]">{{ cookingClass.className }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-[#8B4513]">{{ cookingClass.chefName }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-[#8B4513]">{{ cookingClass.location }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-[#8B4513]">{{ cookingClass.durationInHours }} hours</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-[#8B4513]">{{ cookingClass.fee | currency }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span [ngClass]="{
+                  'bg-green-100 text-green-800': cookingClass.skillLevel === 'Beginner',
+                  'bg-blue-100 text-blue-800': cookingClass.skillLevel === 'Intermediate',
+                  'bg-purple-100 text-purple-800': cookingClass.skillLevel === 'Advanced'
+                }" class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full shadow">
+                  {{ cookingClass.skillLevel }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2">
+                <button 
+                  (click)="editClass(cookingClass.cookingClassId)" 
+                  class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs rounded-md text-[#FFF8DC] bg-[#6B8E23] hover:bg-[#58801A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6B8E23] transition duration-150 ease-in-out"
+                >
+                  <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="#FFF8DC">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  Edit
+                </button>
+                <button 
+                  (click)="confirmDelete(cookingClass)" 
+                  class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out"
+                >
+                  <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  Delete
+                </button>
+                <button
+  (click)="viewProfile(cookingClass)" 
+  class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs rounded-md text-[#FFF8DC] bg-[#DAA520] hover:bg-[#C9A635] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DAA520] transition duration-150 ease-in-out"
+>
+  <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="#FFF8DC">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c3.314 0 6.314 1.21 8.879 3.204M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+  </svg>
+  View Cooking Class
+</button>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- Pagination Controls -->
+    <div *ngIf="filteredClasses.length > itemsPerPage" class="flex justify-center mt-6 space-x-2">
+      <button 
+        (click)="prevPage()" 
+        [disabled]="currentPage === 1"
+        class="px-3 py-1 rounded border border-[#DAA520] bg-[#FFF8DC] text-[#8B4513] hover:bg-[#F3CA52]/40 disabled:opacity-50"
+      >
+        Previous
+      </button>
+      <ng-container *ngFor="let page of getPageArray()">
+        <button
+          (click)="goToPage(page)"
+          [class.font-bold]="page === currentPage"
+          class="px-3 py-1 rounded border border-[#DAA520] bg-[#FFF8DC] text-[#8B4513] hover:bg-[#F3CA52]/40"
+        >
+          {{ page }}
+        </button>
+      </ng-container>
+      <button 
+        (click)="nextPage()" 
+        [disabled]="currentPage === totalPages"
+        class="px-3 py-1 rounded border border-[#DAA520] bg-[#FFF8DC] text-[#8B4513] hover:bg-[#F3CA52]/40 disabled:opacity-50"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="showProfileModal" 
+  class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-[#FFF8DC]/30"
+>
+
+  <div class="bg-[#FFF8DC] rounded-lg shadow-xl p-6 w-full max-w-md">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold text-[#8B4513]">Cooking Class</h2>
+      <button (click)="closeProfileModal()" class="text-[#DAA520] hover:text-[#C9A635]">
+        ✕
+      </button>
+    </div>
+    <div class="space-y-2 text-[#8B4513]">
+      <p><strong>Name:</strong> {{ selectedProfile?.chefName }}</p>
+      <p><strong>Location:</strong> {{ selectedProfile?.location }}</p>
+      <p><strong>Skill Level:</strong> {{ selectedProfile?.skillLevel }}</p>
+      <p><strong>Fee:</strong> {{ selectedProfile?.fee | currency }}</p>
+      <p><strong>Duration:</strong> {{ selectedProfile?.durationInHours }} hours</p>
+      <p><strong>Class Name:</strong> {{ selectedProfile?.className }}</p>
+    </div>
+    <div class="mt-4 text-right">
+      <button 
+        (click)="closeProfileModal()" 
+        class="px-4 py-2 bg-[#DAA520] text-white rounded hover:bg-[#C9A635]"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+

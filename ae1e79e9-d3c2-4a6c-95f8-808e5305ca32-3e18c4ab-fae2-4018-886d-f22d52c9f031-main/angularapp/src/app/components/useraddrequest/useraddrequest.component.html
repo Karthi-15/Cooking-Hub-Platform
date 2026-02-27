@@ -1,0 +1,106 @@
+<div class="container mx-auto px-4 pt-28 py-16 min-h-screen bg-[url('../assets/doodle.png')] bg-cover bg-center">
+  <div class="max-w-3xl mx-auto p-10 rounded-2xl shadow-2xl bg-[#FFF8DC]/70 backdrop-blur-2xl border border-[#DAA520]/40 ring-2 ring-[#6B8E23]/10 animate-fade-in-slow transition hover:ring-[#6B8E23]/30">
+    <h2 class="text-3xl font-extrabold text-[#8B4513] mb-10 text-center drop-shadow-lg animate-fade-in">Cooking Class Request Form</h2>
+      
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-8 animate-fade-in">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-[#6B8E23] mx-auto mb-4"></div>
+      <p class="mt-4 text-2xl font-bold text-[#8B4513]">Loading class information ...</p>
+    </div>
+    
+    <!-- Error Message State -->
+    <div *ngIf="!loading && errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 animate-fade-in" role="alert">
+      <span class="block sm:inline">{{ errorMessage }}</span>
+    </div>
+    
+    <!-- Form Card -->
+    <div *ngIf="!loading && cookingClass">
+      <div class="mb-8 bg-[#FFF8DC]/90 backdrop-blur-lg border border-[#DAA520]/20 p-6 rounded-xl shadow-lg animate-slide-up">
+        <h3 class="text-xl font-bold text-[#6B8E23] mb-4">{{ cookingClass.ClassName }}</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm text-[#8B4513] mb-1"><span class="font-medium">Cuisine Type:</span> {{ cookingClass.cuisineType }}</p>
+            <p class="text-sm text-[#8B4513] mb-1"><span class="font-medium">Chef Name:</span> {{ cookingClass.chefName }}</p>
+            <p class="text-sm text-[#8B4513] mb-1"><span class="font-medium">Location:</span> {{ cookingClass.location }}</p>
+          </div>
+          <div>
+            <p class="text-sm text-[#8B4513] mb-1"><span class="font-medium">Duration:</span> {{ cookingClass.durationInHours }} hour(s)</p>
+            <p class="text-sm text-[#8B4513] mb-1"><span class="font-medium">Fee:</span> {{ cookingClass.fee | currency }}</p>
+            <p class="text-sm text-[#8B4513] mb-1"><span class="font-medium">Skill Level:</span> {{ cookingClass.skillLevel }}</p>
+          </div>
+        </div>
+      </div>
+      <form [formGroup]="requestForm" (ngSubmit)="onSubmit($event)" class="space-y-8 animate-slide-up">
+        <!-- Dietary Preferences -->
+<div class="group">
+  <label for="dietaryPreferences" class="block mb-2 text-lg font-bold text-[#6B8E23]">Dietary Preferences</label>
+  <textarea 
+    id="dietaryPreferences" 
+    formControlName="DietaryPreferences" 
+    rows="3"
+    placeholder="Vegetarian, vegan, gluten-free, allergies, etc."
+    class="border border-[#DAA520]/40 rounded-lg block w-full p-2.5 text-sm outline-none bg-[#FFF8DC]/70 backdrop-blur-md focus:ring-2 focus:ring-[#6B8E23] focus:bg-[#FFF8DC] shadow-sm transition group-hover:scale-105 text-[#8B4513]">
+  </textarea>
+  <div *ngIf="requestForm.get('DietaryPreferences')?.invalid && requestForm.get('DietaryPreferences')?.touched" class="text-red-500 text-xs mt-1 font-semibold animate-pulse">
+    <span *ngIf="requestForm.get('DietaryPreferences')?.errors?.required">Dietary preferences are required.</span>
+    <span *ngIf="requestForm.get('DietaryPreferences')?.errors?.whitespace">Input cannot be empty or just spaces.</span>
+    <span *ngIf="requestForm.get('DietaryPreferences')?.errors?.invalidChars">Input contains invalid characters.</span>
+  </div>
+</div>
+
+<!-- Cooking Goals -->
+<div class="group">
+  <label for="cookingGoals" class="block mb-2 text-lg font-bold text-[#6B8E23]">Cooking Goals</label>
+  <textarea 
+    id="cookingGoals" 
+    formControlName="CookingGoals" 
+    rows="3"
+    placeholder="What do you hope to learn from this class?"
+    class="border border-[#DAA520]/40 rounded-lg block w-full p-2.5 text-sm outline-none bg-[#FFF8DC]/70 backdrop-blur-md focus:ring-2 focus:ring-[#6B8E23] focus:bg-[#FFF8DC] shadow-sm transition group-hover:scale-105 text-[#8B4513]">
+  </textarea>
+  <div *ngIf="requestForm.get('CookingGoals')?.invalid && requestForm.get('CookingGoals')?.touched" class="text-red-500 text-xs mt-1 font-semibold animate-pulse">
+    <span *ngIf="requestForm.get('CookingGoals')?.errors?.required">Cooking goals are required.</span>
+    <span *ngIf="requestForm.get('CookingGoals')?.errors?.whitespace">Input cannot be empty or just spaces.</span>
+    <span *ngIf="requestForm.get('CookingGoals')?.errors?.invalidChars">Input contains invalid characters.</span>
+  </div>
+</div>
+        <!-- Additional Comments -->
+        <div class="group">
+          <label for="comments" class="block mb-2 text-lg font-bold text-[#6B8E23]">Additional Comments (Optional)</label>
+          <textarea 
+            id="comments" 
+            formControlName="Comments" 
+            rows="3"
+            placeholder="Any additional information you'd like to provide"
+            class="border border-[#DAA520]/40 rounded-lg block w-full p-2.5 text-sm outline-none bg-[#FFF8DC]/70 backdrop-blur-md focus:ring-2 focus:ring-[#6B8E23] focus:bg-[#FFF8DC] shadow-sm transition group-hover:scale-105 text-[#8B4513]"
+          ></textarea>
+        </div>
+        <!-- Submit Button -->
+        <div class="flex justify-end">
+          <button 
+            type="submit" 
+            [disabled]="submitting" 
+            class="inline-flex justify-center py-2 px-6 border border-transparent shadow-lg text-sm font-bold rounded-md text-[#FFF8DC] bg-[#6B8E23] hover:bg-[#58801A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6B8E23] active:scale-95 transition hover:scale-105 hover:shadow-xl"
+          >
+            {{ submitting ? 'Submitting...' : 'Submit Request' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Success Modal -->
+<div *ngIf="showSuccessModal" class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-center animate-fade-in">
+  <div class="bg-[#FFF8DC]/95 backdrop-blur-xl rounded-xl p-8 shadow-2xl max-w-md border border-[#DAA520]/40 ring-2 ring-[#6B8E23]/10 animate-fade-in-slow">
+    <h3 class="text-lg font-bold text-[#8B4513] mb-4 drop-shadow-md">Success!</h3>
+    <p class="text-[#6B8E23] mb-6">Your request has been submitted successfully! The admin will review your request and update the status.</p>
+    <div class="flex justify-end">
+      <button 
+        class="bg-[#6B8E23] text-[#FFF8DC] px-6 py-2 rounded font-medium hover:bg-[#58801A] transition hover:scale-105"
+        (click)="closeSuccessModal()"
+      >
+        OK
+      </button>
+    </div>
+  </div>
+</div>

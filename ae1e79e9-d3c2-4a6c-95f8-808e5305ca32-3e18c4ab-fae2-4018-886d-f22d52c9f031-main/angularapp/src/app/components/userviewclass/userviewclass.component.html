@@ -1,0 +1,246 @@
+<div class="container mx-auto pt-27 px-4 py-8 max-w-7xl">
+
+  <!-- Header Section -->
+  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+    <h1 class="text-3xl font-bold text-[#8B4513]">Available Classes</h1>
+    <div class="relative w-full sm:w-64">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        (input)="search()" 
+        placeholder="Search classes..."
+        class="border border-[#DAA520] rounded-lg block w-full pl-10 pr-4 py-2.5 text-sm text-[#8B4513]
+               placeholder:text-[#B5A671]
+               focus:outline-none focus:ring-2 focus:ring-[#6B8E23] focus:border-transparent
+               transition duration-150 ease-in-out"
+      >
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <svg class="h-5 w-5 text-[#DAA520]" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="bg-white rounded-lg shadow-lg p-8 text-center">
+    <iframe class="mx-auto" src="https://lottie.host/embed/7b59104f-5872-4013-b910-b5ed815594a2/JptQEYQbMT.lottie"></iframe>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!loading && error" class="bg-[#F3CA52]/20 border border-[#DAA520] text-[#8B4513] px-6 py-4 rounded-lg shadow-sm" role="alert">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-[#DAA520]" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <div class="ml-3">
+        <p class="font-medium">{{ error }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Class Cards -->
+  <div *ngIf="!loading && !error">
+
+    <!-- Empty State -->
+    <div *ngIf="filteredClasses.length === 0" class="bg-[#FFF8DC] rounded-lg shadow-lg p-8 text-center">
+      <svg class="mx-auto h-12 w-12 text-[#DAA520]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+      <p class="mt-4 text-lg font-medium text-[#8B4513]">No cooking classes found</p>
+      <p class="mt-1 text-sm text-[#B5A671]">Try adjusting your search to find what you're looking for.</p>
+    </div>
+
+    <!-- Paginated Class Grid -->
+    <div *ngIf="filteredClasses.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let cookingClass of paginatedClasses()" 
+           class="bg-[#FFF8DC] rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300 ease-in-out">
+        
+        <!-- Card Header -->
+        <div class="px-6 py-4 bg-[#F3CA52]/40 border-b border-[#DAA520]/20">
+          <h3 class="text-lg font-semibold text-[#8B4513] truncate">{{ cookingClass.className }}</h3>
+          <div class="flex items-center mt-1">
+            <svg class="h-4 w-4 text-[#6B8E23] mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            <span class="text-sm font-medium text-[#6B8E23]">{{ cookingClass.cuisineType }}</span>
+          </div>
+        </div>
+        
+        <!-- Card Content -->
+        <div class="px-6 py-4">
+          <div class="space-y-2">
+            <div class="flex items-center text-sm text-[#8B4513]">
+              <svg class="h-4 w-4 mr-2 text-[#DAA520]" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+              </svg>
+              <span class="font-medium">Chef:</span>
+              <span class="ml-1">{{ cookingClass.chefName }}</span>
+            </div>
+            <div class="flex items-center text-sm text-[#8B4513]">
+              <svg class="h-4 w-4 mr-2 text-[#DAA520]" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+              </svg>
+              <span class="font-medium">Location:</span>
+              <span class="ml-1">{{ cookingClass.location }}</span>
+            </div>
+            <div class="flex items-center text-sm text-[#8B4513]">
+              <svg class="h-4 w-4 mr-2 text-[#DAA520]" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+              </svg>
+              <span class="font-medium">Duration:</span>
+              <span class="ml-1">{{ cookingClass.durationInHours }} hour{{ cookingClass.durationInHours > 1 ? 's' : '' }}</span>
+            </div>
+            <div class="flex items-center text-sm text-[#8B4513]">
+              <svg class="h-4 w-4 mr-2 text-[#DAA520]" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd" />
+              </svg>
+              <span class="font-medium">Fee:</span>
+              <span class="ml-1 text-[#6B8E23] font-semibold">{{ cookingClass.fee | currency }}</span>
+            </div>
+          </div>
+          <!-- Skill Level Badge -->
+          <div class="mt-4 mb-3">
+            <span [ngClass]="{
+              'bg-green-100 text-green-800': cookingClass.skillLevel === 'Beginner',
+              'bg-blue-100 text-blue-800': cookingClass.skillLevel === 'Intermediate',
+              'bg-purple-100 text-purple-800': cookingClass.skillLevel === 'Advanced'
+            }" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+              {{ cookingClass.skillLevel }}
+            </span>
+          </div>
+        </div>
+        <!-- Card Footer -->
+        <div class="px-6 py-4 bg-silver border-t border-[#DAA520]/20 rounded-b-lg">
+          <button 
+            (click)="viewDetails(cookingClass)"
+            class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-[#FFF8DC] bg-[#6B8E23] hover:bg-[#58801A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6B8E23] transition duration-150 ease-in-out"
+          >
+            View Details
+            <svg class="ml-2 h-4 w-4" fill="none" stroke="#FFF8DC" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div *ngIf="filteredClasses.length > itemsPerPage" class="flex justify-center mt-6 space-x-2">
+      <button 
+        (click)="prevPage()" 
+        [disabled]="currentPage === 1"
+        class="px-3 py-1 rounded border border-[#DAA520] bg-[#FFF8DC] text-[#8B4513] hover:bg-[#F3CA52]/40 disabled:opacity-50"
+      >
+        Previous
+      </button>
+      <ng-container *ngFor="let page of getPageArray()">
+        <button
+          (click)="goToPage(page)"
+          [class.font-bold]="page === currentPage"
+          class="px-3 py-1 rounded border border-[#DAA520] bg-[#FFF8DC] text-[#8B4513] hover:bg-[#F3CA52]/40"
+        >
+          {{ page }}
+        </button>
+      </ng-container>
+      <button 
+        (click)="nextPage()" 
+        [disabled]="currentPage === totalPages"
+        class="px-3 py-1 rounded border border-[#DAA520] bg-[#FFF8DC] text-[#8B4513] hover:bg-[#F3CA52]/40 disabled:opacity-50"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Enhanced Class Details Modal -->
+<div *ngIf="showDetailsModal && selectedClass" 
+     class="fixed inset-0 z-1000 backdrop-blur-sm flex justify-center items-center p-4">
+  <div class="relative bg-[#FFF8DC] rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+    <!-- Modal Header -->
+    <div class="px-6 py-4 border-b border-[#DAA520] flex justify-between items-center">
+      <h3 class="text-xl font-semibold text-[#8B4513]">{{ selectedClass.className }}</h3>
+      <button 
+        class="rounded-full p-1 text-[#6B8E23] hover:text-[#4a6213] hover:bg-[#FFF8DC] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6B8E23] transition duration-150 ease-in-out"
+        (click)="closeDetailsModal()"
+      >
+        <svg class="h-6 w-6" fill="none" stroke="#6B8E23" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <!-- Modal Content -->
+    <div class="px-6 py-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Left Column -->
+        <div class="space-y-4">
+          <div>
+            <label class="text-sm font-medium text-[#6B8E23]">Cuisine Type</label>
+            <p class="mt-1 text-sm text-[#8B4513]">{{ selectedClass.cuisineType }}</p>
+          </div>
+          <div>
+            <label class="text-sm font-medium text-[#6B8E23]">Chef Name</label>
+            <p class="mt-1 text-sm text-[#8B4513]">{{ selectedClass.chefName }}</p>
+          </div>
+          <div>
+            <label class="text-sm font-medium text-[#6B8E23]">Location</label>
+            <p class="mt-1 text-sm text-[#8B4513]">{{ selectedClass.location }}</p>
+          </div>
+          <div>
+            <label class="text-sm font-medium text-[#6B8E23]">Duration</label>
+            <p class="mt-1 text-sm text-[#8B4513]">{{ selectedClass.durationInHours }} hour{{ selectedClass.durationInHours > 1 ? 's' : '' }}</p>
+          </div>
+        </div>
+        <!-- Right Column -->
+        <div class="space-y-4">
+          <div>
+            <label class="text-sm font-medium text-[#6B8E23]">Fee</label>
+            <p class="mt-1 text-sm font-semibold text-[#6B8E23]">{{ selectedClass.fee | currency }}</p>
+          </div>
+          <div>
+            <label class="text-sm font-medium text-[#6B8E23]">Ingredients Provided</label>
+            <p class="mt-1 text-sm text-[#8B4513]">{{ selectedClass.ingredientsProvided }}</p>
+          </div>
+          <div>
+            <label class="text-sm font-medium text-[#6B8E23]">Skill Level</label>
+            <p class="mt-1">
+              <span [ngClass]="{
+                'bg-green-100 text-green-800': selectedClass.skillLevel === 'Beginner',
+                'bg-blue-100 text-blue-800': selectedClass.skillLevel === 'Intermediate',
+                'bg-purple-100 text-purple-800': selectedClass.skillLevel === 'Advanced'
+              }" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+                {{ selectedClass.skillLevel }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- Special Requirements Section -->
+      <div class="mt-6">
+        <label class="text-sm font-medium text-[#6B8E23]">Special Requirements</label>
+        <div class="mt-1 p-4 bg-[#FFF8DC]/80 rounded-lg border border-[#DAA520]/40">
+          <p class="text-sm text-[#8B4513] whitespace-pre-wrap">{{ selectedClass.specialRequirements || 'None' }}</p>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Footer -->
+    <div class="px-6 py-4 border-t border-[#DAA520]/40 bg-[#FFF8DC]/80 rounded-b-lg flex justify-end space-x-4">
+      <button 
+        class="inline-flex justify-center px-6 py-2 border border-[#DAA520] rounded-lg shadow-sm text-sm font-medium text-[#8B4513] bg-[#FFF8DC] hover:bg-[#F3CA52]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DAA520] transition duration-150 ease-in-out"
+        (click)="closeDetailsModal()"
+      >
+        Close
+      </button>
+      <button 
+        class="inline-flex justify-center px-6 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-[#FFF8DC] bg-[#6B8E23] hover:bg-[#58801A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6B8E23] transition duration-150 ease-in-out"
+        (click)="applyForClass()"
+      >
+        Apply for Class
+      </button>
+    </div>
+  </div>
+</div>

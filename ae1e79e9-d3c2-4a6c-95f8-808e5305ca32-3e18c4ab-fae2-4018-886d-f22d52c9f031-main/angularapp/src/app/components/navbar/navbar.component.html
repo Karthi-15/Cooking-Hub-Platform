@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cooking Hub - Glassmorphism Navbar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .hover-underline-animation {
+      position: relative;
+    }
+
+    .hover-underline-animation::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      transform: scaleX(0);
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #DAA520; /* Golden Harvest */
+      transform-origin: bottom right;
+      transition: transform 0.25s ease-out;
+    }
+
+    .hover-underline-animation:hover::after {
+      transform: scaleX(1);
+      transform-origin: bottom left;
+    }
+  </style>
+</head>
+<body class="bg-[#FFFAF0]">  <!-- Floral White background -->
+
+  <header class="fixed top-0 left-0 w-full z-50 bg-[#DAA520]/70 backdrop-blur-md text-[#FFF8DC] shadow-lg animate-fade-in rounded-b-xl">
+    <nav class="flex items-center justify-between px-10 py-6 max-w-7xl mx-auto">
+
+      <!-- Logo and Site Name -->
+      <div class="flex items-center gap-x-3">
+        <img src="../../../assets/chef-toque.png" alt="Cooking Hub" class="w-10" />
+        <a routerLink="/home" class="text-3xl font-extrabold tracking-wide text-[#8B4513] hover:text-[#FFE135] transition-colors duration-300 hover-underline-animation">
+          Cooking Hub
+        </a>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex gap-x-4">
+        <a routerLink="/register">
+          <button class="px-5 py-2 rounded-full border border-white/40 bg-[#6B8E23]/20 text-[#FFF8DC] hover:bg-[#6B8E23]/40 hover:text-[#FFF8DC] font-semibold transition-all duration-300 shadow-md hover:shadow-xl animate-fade-in">
+            Register
+          </button>
+        </a>
+        <a routerLink="/login">
+          <button class="px-5 py-2 rounded-full border border-white/40 bg-[#6B8E23]/20 text-[#FFF8DC] hover:bg-[#6B8E23]/40 hover:text-[#FFF8DC] font-semibold transition-all duration-300 shadow-md hover:shadow-xl animate-fade-in">
+            Login
+          </button>
+        </a>
+      </div>
+
+    </nav>
+  </header>
+
+</body>
+</html>

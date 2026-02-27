@@ -1,0 +1,23 @@
+<!-- Conditional Navbar based on role -->
+<ng-container *ngIf="!authService.isAdmin() && !authService.isUser()">
+  <app-navbar></app-navbar>
+</ng-container>
+
+<ng-container *ngIf="authService.isAdmin()">
+  <app-adminnav></app-adminnav>
+</ng-container>
+
+<ng-container *ngIf="authService.isUser()">
+  <app-usernav></app-usernav>
+</ng-container>
+
+<!-- Main content container with palette background gradient -->
+<div class="min-h-screen px-10" style="background-color: #FFFAF0;">
+
+  <!-- Router outlet for dynamic content -->
+  <router-outlet></router-outlet>
+  
+</div>
+
+<!-- Persistent Footer -->
+<app-footer></app-footer>

@@ -1,0 +1,104 @@
+<header class="fixed top-0 left-0 w-full z-50 bg-[#DAA520]/70 backdrop-blur-md text-[#FFF8DC] shadow-lg rounded-b-xl">
+  <nav class="flex items-center justify-between px-10 py-6 max-w-7xl mx-auto">
+    <!-- Logo Section -->
+    <div class="flex gap-x-3 items-center">
+      <img src="../../../assets/chef-toque.png" alt="Cooking Hub" class="w-10" />
+      <a routerLink="/admin/home"
+         class="text-3xl font-extrabold tracking-wide text-[#8B4513] hover:text-[#FCD34D] transition-colors duration-300 hover-underline-animation">
+        Cooking Hub
+      </a>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="flex gap-x-4 text-[#8B4513] items-center">
+      <!-- Cooking Class Dropdown -->
+      <div class="relative">
+        <button id="dropdownDefaultButton" (click)="toggleDropdown()"
+          class="flex items-center gap-x-1 font-semibold px-3 py-1 rounded-full border border-white/40 bg-white/10 backdrop-blur-md hover:bg-white/20 hover:text-[#6B8E23] transition-all duration-300">
+          Cooking Class
+          <svg class="w-2.5 h-2.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+          </svg>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div id="dropdown" [class.hidden]="isDropdownHidden"
+          class="absolute bg-[#F3CA52] rounded-lg mt-2 w-36 shadow-lg z-50"
+          style="top: calc(100% + 10px); left: 0;">
+          <ul class="py-2 text-sm text-[#8B4513]">
+            <li>
+              <a routerLink="admin/add-class"
+                 class="block px-4 py-2 font-semibold hover:text-[#FFF8DC] hover:bg-[#6B8E23] rounded">
+                Add Class
+              </a>
+            </li>
+            <li>
+              <a routerLink="admin/view-class"
+                 class="block px-4 py-2 font-semibold hover:text-[#FFF8DC] hover:bg-[#6B8E23] rounded">
+                View Class
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <a routerLink="/admin/view-requests" routerLinkActive="active-link"
+         class="font-semibold px-3 py-1 hover:text-[#6B8E23] transition-colors duration-300 rounded">
+        Class Requests
+      </a>
+      <a routerLink="/admin/view-feedback" routerLinkActive="active-link"
+         class="font-semibold px-3 py-1 hover:text-[#6B8E23] transition-colors duration-300 rounded">
+        Feedbacks
+      </a>
+    </div>
+
+    <!-- User Info & Logout Section -->
+    <div class="flex items-center gap-x-3 text-[#8B4513]">
+      <span class="font-semibold text-sm cursor-pointer" (click)="showAdminDetailsModal = true">
+        {{ username }} <span class="bg-[#6B8E23] text-white px-2 py-0.5 rounded-full text-xs ml-1">{{ userRole }}</span>
+      </span>
+      <button (click)="confirmLogout()"
+        class="font-semibold px-3 py-1 rounded-full border border-white/40 bg-white/10 backdrop-blur-md hover:bg-white/20 hover:text-[#6B8E23] transition-all duration-300">
+        Logout
+      </button>
+    </div>
+    
+  </nav>
+</header>
+
+<!-- Logout Confirmation Modal -->
+<div *ngIf="showLogoutModal" class="fixed inset-0 z-100 backdrop-blur-xs flex justify-center items-center">
+  <div class="bg-white rounded-lg p-6 w-96 max-w-md shadow-lg">
+    <h2 class="text-xl font-bold mb-4 text-[#6B8E23]">Confirm Logout</h2>
+    <p class="mb-6 text-[#8B4513]">Are you sure you want to logout?</p>
+    <div class="flex justify-end space-x-4">
+      <button class="px-4 py-2 bg-[#F3CA52] font-semibold text-black rounded hover:bg-yellow-600 transition-colors duration-300"
+              (click)="closeLogoutModal()">
+        Cancel
+      </button>
+      <button class="px-4 py-2 bg-red-600 font-semibold text-white rounded hover:bg-red-700 transition-colors duration-300"
+              (click)="logout()">
+        Yes, Logout
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Details Modal -->
+<div *ngIf="showAdminDetailsModal" class="fixed inset-0 z-100 backdrop-blur-xs flex justify-center items-center">
+  <div class="bg-white rounded-lg p-6 w-96 max-w-md shadow-lg">
+    <h2 class="text-xl font-bold mb-4 text-[#6B8E23]">Admin Details</h2>
+    <div class="text-[#8B4513] space-y-2">
+      <p><strong>Username:</strong> {{ username }}</p>
+      <p><strong>Role:</strong> {{ userRole }}</p>
+      <p><strong>Email:</strong> {{ adminEmail }}</p>
+      <p><strong>Mobile:</strong> {{ mobile }}</p>
+    </div>
+    <div class="flex justify-end mt-6">
+      <button class="px-4 py-2 bg-[#F3CA52] font-semibold text-black rounded hover:bg-yellow-600 transition-colors duration-300"
+              (click)="showAdminDetailsModal = false">
+        Close
+      </button>
+    </div>
+  </div>
+</div>

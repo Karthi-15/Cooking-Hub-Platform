@@ -1,0 +1,146 @@
+<div class="container mx-auto px-4 pt-28 py-16 min-h-screen bg-[url('../assets/doodle.png')] bg-cover bg-center">
+  <div class="max-w-3xl mx-auto bg-[#FFF8DC]/80 backdrop-blur-xl p-10 rounded-2xl shadow-2xl border border-[#DAA520]/30 ring-2 ring-[#6B8E23]/10 animate-fade-in-slow transition hover:ring-[#6B8E23]/30">
+    <h2 class="text-3xl font-extrabold text-[#8B4513] mb-8 drop-shadow-lg animate-fade-in text-center">Edit Cooking Class</h2>
+    
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-8 animate-fade-in">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-[#6B8E23] mx-auto mb-4"></div>
+      <p class="mt-2 text-lg text-[#8B4513] font-medium">Loading class information...</p>
+    </div>
+
+    <!-- Edit Form -->
+    <form *ngIf="!loading" [formGroup]="classForm" (ngSubmit)="onSubmit($event)" class="space-y-8 animate-slide-up">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="space-y-4">
+          <!-- Class Name -->
+          <div class="group">
+            <label for="className" class="font-bold block mb-2 text-sm text-[#6B8E23]">Class Name</label>
+            <input type="text" id="className" formControlName="className"
+              class="border border-[#DAA520]/30 rounded-lg block w-full p-2.5 text-sm outline-none bg-[#FFF8DC]/70 backdrop-blur-md focus:ring-2 focus:ring-[#6B8E23] focus:bg-[#FFF8DC] shadow-sm transition group-hover:scale-105 text-[#8B4513]">
+              <div *ngIf="classForm.get('className')?.invalid && classForm.get('className')?.touched" class="text-red-500 text-sm animate-pulse">
+                <span *ngIf="classForm.get('className')?.errors?.whitespace">Class name cannot be empty or just spaces.</span>
+                <span *ngIf="classForm.get('className')?.errors?.maxlength">Class name must be under 80 characters.</span>
+                <span *ngIf="classForm.get('className')?.errors?.invalidChars">Class name contains invalid characters.</span>
+              </div>
+          </div>
+          <!-- Cuisine Type -->
+          <div class="group">
+            <label for="cuisineType" class="font-bold block mb-2 text-sm text-[#6B8E23]">Cuisine Type</label>
+            <input type="text" id="cuisineType" formControlName="cuisineType"
+              class="border border-[#DAA520]/30 rounded-lg block w-full p-2.5 text-sm outline-none bg-[#FFF8DC]/70 backdrop-blur-md focus:ring-2 focus:ring-[#6B8E23] focus:bg-[#FFF8DC] shadow-sm transition group-hover:scale-105 text-[#8B4513]">
+              <div *ngIf="classForm.get('cuisineType')?.invalid && classForm.get('cuisineType')?.touched" class="text-red-500 text-sm animate-pulse">
+                <span *ngIf="classForm.get('cuisineType')?.errors?.whitespace">Cuisine Type cannot be empty or just spaces.</span>
+                <span *ngIf="classForm.get('cuisineType')?.errors?.pattern">Only characters and spaces are allowed.</span>
+                <span *ngIf="classForm.get('cuisineType')?.errors?.invalidChars">Cuisine Type contains invalid characters.</span>
+              </div>
+          </div>
+          <!-- Chef Name -->
+          <div class="group">
+            <label for="chefName" class="font-bold block mb-2 text-sm text-[#6B8E23]">Chef Name</label>
+            <input type="text" id="chefName" formControlName="chefName"
+              class="border border-[#DAA520]/30 rounded-lg block w-full p-2.5 text-sm outline-none bg-[#FFF8DC]/70 backdrop-blur-md focus:ring-2 focus:ring-[#6B8E23] focus:bg-[#FFF8DC] shadow-sm transition group-hover:scale-105 text-[#8B4513]">
+            <div *ngIf="classForm.get('chefName')?.invalid && classForm.get('chefName')?.touched">
+              <span *ngIf="classForm.get('chefName')?.hasError('whitespace')" class="text-red-500 text-sm animate-pulse"> Chef Name cannot be empty or just spaces. </span>
+              <span *ngIf="classForm.get('chefName')?.errors?.invalidChars" class="text-red-500 text-sm animate-pulse">Chef Name contains invalid characters.</span>
+            </div>
+          </div>
+          <!-- Location -->
+          <div class="group">
+            <label for="location" class="font-bold block mb-2 text-sm text-[#6B8E23]">Location</label>
+            <input type="text" id="location" formControlName="location"
+              class="border border-[#DAA520]/30 rounded-lg block w-full p-2.5 text-sm outline-none bg-[#FFF8DC]/70 backdrop-blur-md focus:ring-2 focus:ring-[#6B8E23] focus:bg-[#FFF8DC] shadow-sm transition group-hover:scale-105 text-[#8B4513]">
+              <div  *ngIf="classForm.get('location')?.invalid && classForm.get('location')?.touched">
+                <span *ngIf="classForm.get('location')?.hasError('whitespace')" class="text-red-500 text-sm animate-pulse"> Location cannot be empty or just spaces. </span>
+                <span *ngIf="classForm.get('location')?.errors?.invalidChars" class="text-red-500 text-sm animate-pulse">Location contains invalid characters.</span>
+              </div>
+          </div>
+          <!-- Fee -->
+          <div class="group">
+            <label for="fee" class="font-bold block mb-2 text-sm text-[#6B8E23]">Fee</label>
+            <input type="number" id="fee" formControlName="fee"
+              class="border border-[#DAA520]/30 rounded-lg block w-full p-2.5 text-sm outline-none bg-[#FFF8DC]/70 backdrop-blur-md focus:ring-2 focus:ring-[#6B8E23] focus:bg-[#FFF8DC] shadow-sm transition group-hover:scale-105 text-[#8B4513]">
+              <div *ngIf="classForm.get('fee')?.invalid && classForm.get('fee')?.touched" class="text-red-500 text-sm animate-pulse">
+                <span *ngIf="classForm.get('fee')?.errors?.required">Fee is required.</span>
+                <span *ngIf="classForm.get('fee')?.errors?.min">Fee must be at least ₹1.</span>
+                <span *ngIf="classForm.get('fee')?.errors?.max">Fee cannot exceed ₹10,000.</span>
+              </div>    
+          </div>
+        </div>
+        <div class="space-y-4">
+          <!-- Duration in Hours -->
+          <div class="group">
+            <label for="durationInHours" class="font-bold block mb-2 text-sm text-[#6B8E23]">Duration (hours)</label>
+            <input type="number" id="durationInHours" formControlName="durationInHours"
+              class="border border-[#DAA520]/30 rounded-lg block w-full p-2.5 text-sm outline-none bg-[#FFF8DC]/70 backdrop-blur-md focus:ring-2 focus:ring-[#6B8E23] focus:bg-[#FFF8DC] shadow-sm transition group-hover:scale-105 text-[#8B4513]">
+              <div *ngIf="classForm.get('durationInHours')?.invalid && classForm.get('durationInHours')?.touched" class="text-red-500 text-sm animate-pulse">
+                <span *ngIf="classForm.get('durationInHours')?.errors?.required">Duration is required.</span>
+                <span *ngIf="classForm.get('durationInHours')?.errors?.min">Duration must be at least 1 hour.</span>
+                <span *ngIf="classForm.get('durationInHours')?.errors?.max">Duration cannot exceed 12 hours.</span>
+              </div>
+            </div>
+          <!-- Ingredients Provided -->
+          <div class="group">
+            <label for="ingredientsProvided" class="font-bold block mb-2 text-sm text-[#6B8E23]">Ingredients Provided</label>
+            <input type="text" id="ingredientsProvided" formControlName="ingredientsProvided"
+              class="border border-[#DAA520]/30 rounded-lg block w-full p-2.5 text-sm outline-none bg-[#FFF8DC]/70 backdrop-blur-md focus:ring-2 focus:ring-[#6B8E23] focus:bg-[#FFF8DC] shadow-sm transition group-hover:scale-105 text-[#8B4513]">
+              <div  *ngIf="classForm.get('ingredientsProvided')?.invalid && classForm.get('ingredientsProvided')?.touched">
+                <span *ngIf="classForm.get('ingredientsProvided')?.hasError('whitespace')" class="text-red-500 text-sm animate-pulse"> Ingredients Provided cannot be empty or just spaces. </span>
+                <span *ngIf="classForm.get('ingredientsProvided')?.errors?.invalidChars" class="text-red-500 text-sm animate-pulse">Ingredients Provided contains invalid characters.</span>
+              </div>
+          </div>
+          <!-- Skill Level -->
+          <div class="group">
+            <label for="skillLevel" class="font-bold block mb-2 text-sm text-[#6B8E23]">Skill Level</label>
+            <select id="skillLevel" formControlName="skillLevel"
+              class="border border-[#DAA520]/30 rounded-lg block w-full p-2.5 text-sm outline-none bg-[#FFF8DC]/70 backdrop-blur-md focus:ring-2 focus:ring-[#6B8E23] focus:bg-[#FFF8DC] transition group-hover:scale-105 text-[#8B4513]">
+              <option value="" disabled>Select skill level</option>
+              <option *ngFor="let level of skillLevels" [value]="level">{{ level }}</option>
+            </select>
+            <div *ngIf="classForm.get('skillLevel')?.hasError('whitespace') && classForm.get('skillLevel')?.touched">
+              <span class="text-red-500 text-sm animate-pulse">Skill Level cannot be empty or just spaces.</span>
+            </div>
+          </div>
+          <!-- Special Requirements -->
+          <div class="group">
+            <label for="specialRequirements" class="font-bold block mb-2 text-sm text-[#6B8E23]">Special Requirements</label>
+            <textarea id="specialRequirements" formControlName="specialRequirements" rows="3"
+              class="border border-[#DAA520]/30 rounded-lg block w-full p-2.5 text-sm outline-none bg-[#FFF8DC]/70 backdrop-blur-md focus:ring-2 focus:ring-[#6B8E23] focus:bg-[#FFF8DC] shadow-sm transition group-hover:scale-105 text-[#8B4513]"></textarea>
+              <div  *ngIf="classForm.get('specialRequirements')?.invalid&& classForm.get('specialRequirements')?.touched">
+                <span *ngIf="classForm.get('specialRequirements')?.hasError('whitespace')" class="text-red-500 text-sm animate-pulse"> Special Requirements cannot be empty or just spaces. </span>
+                <span *ngIf="classForm.get('specialRequirements')?.errors?.invalidChars" class="text-red-500 text-sm animate-pulse">Special Requirements contains invalid characters.</span>
+              </div>
+          </div>
+        </div>
+      </div>
+      <!-- Error Message-->
+      <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative animate-fade-in" role="alert">
+        <span class="block sm:inline">{{ errorMessage }}</span>
+      </div>
+      <!-- Buttons -->
+      <div class="flex justify-end space-x-4">
+        <a routerLink="/admin/view-class"
+          class="inline-flex justify-center py-2 px-6 border border-transparent shadow-lg text-sm font-bold rounded-md text-[#FFF8DC] bg-[#6B8E23] hover:bg-[#58801A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6B8E23] active:scale-95 transition hover:scale-105 hover:shadow-xl">
+          Cancel
+        </a>
+        <button type="submit" [disabled]="submitting"
+          class="inline-flex justify-center py-2 px-6 border border-transparent shadow-lg text-sm font-bold rounded-md text-[#FFF8DC] bg-[#6B8E23] hover:bg-[#58801A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6B8E23] active:scale-95 transition hover:scale-105 hover:shadow-xl">
+          {{ submitting ? 'Updating...' : 'Update Class' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Success Modal -->
+  <div *ngIf="showSuccessModal" class="fixed inset-0 z-50 backdrop-blur-sm flex justify-center items-center animate-fade-in">
+    <div class="bg-[#FFF8DC]/95 backdrop-blur-lg rounded-xl p-8 shadow-2xl max-w-md border border-[#DAA520]/40 ring-2 ring-[#6B8E23]/10 animate-fade-in-slow">
+      <h3 class="text-lg font-bold text-[#8B4513] mb-4 drop-shadow-md">Success!</h3>
+      <p class="text-[#6B8E23] mb-6">Cooking class updated successfully!</p>
+      <div class="flex justify-end">
+        <button class="bg-[#6B8E23] text-[#FFF8DC] px-6 py-2 rounded font-medium hover:bg-[#58801A] transition hover:scale-105"
+          (click)="closeSuccessModal()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

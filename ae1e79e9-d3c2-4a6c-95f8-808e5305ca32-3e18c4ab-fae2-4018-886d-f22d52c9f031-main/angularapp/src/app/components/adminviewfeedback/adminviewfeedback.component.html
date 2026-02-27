@@ -1,0 +1,163 @@
+<div class="container mx-auto pt-28 px-4 py-8 max-w-7xl ">
+ 
+  <!-- Glassmorphic Header -->
+  <div class="flex justify-between items-center mb-8 bg-[#FAF3DD]/80 backdrop-blur-lg rounded-lg shadow-md border border-[#DAA520]/30 px-6 py-4 transition-all duration-700 hover:ring-2 hover:ring-[#F3CA52]/50 animate-fade-in">
+    <h1 class="text-3xl font-bold text-[#8B4513] drop-shadow-lg">Feedback Details</h1>
+    <div class="text-sm text-[#B5A671]">
+      Total Feedbacks: <span class="font-medium text-[#8B4513]">{{ filteredFeedbacks?.length || 0 }}</span>
+    </div>
+  </div>
+ 
+  <!-- Loading State -->
+  <div *ngIf="loading" class="bg-white backdrop-blur-lg rounded-xl shadow-xl p-8 text-center animate-fade-in">
+    <iframe class="mx-auto" src="https://lottie.host/embed/7b59104f-5872-4013-b910-b5ed815594a2/JptQEYQbMT.lottie"></iframe>
+    <p class="mt-4 text-lg font-medium text-[#8B4513]">Loading feedback...</p>
+  </div>
+ 
+ 
+  <!-- Error State -->
+  <div *ngIf="!loading && error" class="bg-[#F3CA52]/20 backdrop-blur-sm border border-[#DAA520] text-[#8B4513] px-6 py-4 rounded-lg shadow-sm animate-fade-in" role="alert">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-[#DAA520]" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <div class="ml-3 animate-pulse">
+        <p class="font-medium">{{ error }}</p>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- Feedback Content -->
+  <div *ngIf="!loading && !error">
+ 
+  <!-- Date Filter Section -->
+  <div class="flex flex-wrap gap-4 mb-6 items-center">
+  <!-- From Date -->
+  <input type="date" [(ngModel)]="startDate"
+         class="border border-[#DAA520]/40 rounded px-3 py-2 bg-[#FFF8DC] text-[#8B4513]" />
+ 
+  <!-- Arrow Icon -->
+  <span class="text-[#DAA520] text-xl font-bold">
+    →
+  </span>
+  <!-- To Date -->
+  <input type="date" [(ngModel)]="endDate"
+         class="border border-[#DAA520]/40 rounded px-3 py-2 bg-[#FFF8DC] text-[#8B4513]" />
+ 
+  <!-- Filter Button -->
+  <button (click)="filterFeedbacksByDate()"
+          class="bg-[#F3CA52] text-[#8B4513] px-4 py-2 rounded hover:bg-[#DAA520]/80 transition">
+    Filter
+  </button>
+ 
+  <!-- Reset Button -->
+  <button (click)="filteredFeedbacks = feedbacks; startDate=''; endDate='';"
+          class="bg-[#FFF8DC] text-[#8B4513] px-4 py-2 rounded hover:bg-[#F3CA52]/60 transition">
+    Reset
+  </button>
+</div>
+ 
+<!-- Search Comments by Keyword -->
+<div class="flex flex-wrap gap-4 mb-6 items-center">
+  <!-- Live Search Input -->
+  <input type="text"
+         [(ngModel)]="searchKeyword"
+         (input)="searchComments()"
+         placeholder="Search comments..."
+         class="border border-[#a3c75b]/40 rounded px-3 py-2 bg-[#FFF8DC] text-[#8B4513] placeholder-[#B5A671] focus:outline-none focus:ring-2 focus:ring-[#d2f573]/50 transition w-full md:w-1/2" />
+ 
+  <!-- Manual Search Button -->
+  <button (click)="searchComments()"
+          class="bg-[#a3c75b] text-[#8B4513] px-4 py-2 rounded hover:bg-[#DAA520]/80 transition">
+    Search
+  </button>
+ 
+  <!-- Clear Search Button -->
+  <button (click)="searchKeyword=''; searchComments();"
+          class="bg-[#d2f573] text-[#8B4513] px-4 py-2 rounded hover:bg-[#F3CA52]/60 transition">
+    Clear
+  </button>
+</div>
+ 
+ 
+ 
+    <!-- Empty State -->
+    <div *ngIf="filteredFeedbacks.length === 0" class="bg-[#FFF8DC]/70 backdrop-blur-lg rounded-xl shadow-xl p-8 text-center animate-fade-in-slow">
+      <svg class="mx-auto h-12 w-12 text-[#DAA520]" fill="none" viewBox="0 0 24 24" stroke="#DAA520">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+      </svg>
+      <p class="mt-4 text-lg font-medium text-[#8B4513]">No feedback available</p>
+      <p class="mt-1 text-sm text-[#B5A671]">Check back later for user feedback.</p>
+    </div>
+ 
+    <!-- Feedback List -->
+    <div *ngIf="filteredFeedbacks.length > 0" class="space-y-8">
+      <div *ngFor="let feedback of filteredFeedbacks"
+           class="bg-[#FFF8DC]/90 backdrop-blur-md shadow-md border-l-4 border-[#DAA520] rounded-xl hover:shadow-lg transition duration-300 animate-fade-in-slow">
+ 
+        <!-- Feedback Header -->
+        <div class="px-6 py-4 bg-[#F3CA52]/20 border-b border-[#DAA520]/20 rounded-t-xl flex justify-between items-center">
+          <div class="flex items-center space-x-3">
+            <div class="flex-shrink-0 h-12 w-12 bg-[#F3CA52]/40 rounded-full flex items-center justify-center shadow">
+              <span class="text-[#6B8E23] font-extrabold text-xl">{{ feedback.username | slice:0:1 | uppercase }}</span>
+            </div>
+            <div>
+              <h2 class="text-lg font-semibold text-[#8B4513]">{{ feedback.username }}</h2>
+              <p class="text-sm text-[#B5A671] flex items-center">
+                <svg class="mr-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                </svg>
+                {{ feedback.date | date:'MMM d, yyyy h:mm a' }}
+              </p>
+            </div>
+          </div>
+          <span class="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium bg-[#F3CA52]/50 text-[#8B4513] animate-fade-in">
+            Feedback
+          </span>
+        </div>
+ 
+        <!-- Feedback Content -->
+        <div class="px-6 py-6 text-[#8B4513]">
+          <p class="whitespace-pre-wrap">{{ feedback.feedbackText }}</p>
+        </div>
+ 
+        <!-- Feedback Footer -->
+        <div class="px-6 py-3 bg-[#F3CA52]/25 border-t border-[#DAA520]/20 flex justify-end rounded-b-xl gap-3">
+          <button (click)="openProfileModal(feedback)"
+            class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs rounded-md text-[#FFF8DC] bg-[#6B8E23] hover:bg-[#58801A] transition duration-200 animate-fade-in hover:scale-105">
+            View Profile
+          </button>
+          <button (click)="contactUser(feedback)"
+            class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs rounded-md text-[#8B4513] bg-[#FFF8DC] hover:bg-[#F3CA52]/80 transition duration-200 animate-fade-in hover:scale-105">
+            Contact User
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- PROFILE MODAL FOR VIEW PROFILE -->
+  <div *ngIf="showProfileModal && selectedProfile" class="fixed inset-0 z-50 backdrop-blur-md flex justify-center items-center">
+    <div class="bg-[#FFF8DC] rounded-xl shadow-lg p-6 max-w-md w-full border-2 border-[#DAA520]/40">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold text-[#8B4513]">User Profile</h3>
+        <button (click)="closeProfileModal()" class="p-1 rounded-full text-[#6B8E23] hover:bg-[#F3CA52]/40 transition">
+          <svg class="h-6 w-6" fill="none" stroke="#6B8E23" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="space-y-2 text-[#8B4513]">
+        <p><span class="font-medium">Username:</span> {{ selectedProfile.username }}</p>
+        <p><span class="font-medium">Email:</span> {{ selectedProfile.email }}</p>
+      </div>
+      <div class="flex justify-end mt-6">
+        <button (click)="closeProfileModal()" class="text-[#FFF8DC] bg-[#6B8E23] hover:bg-[#58801A] px-4 py-2 rounded transition">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

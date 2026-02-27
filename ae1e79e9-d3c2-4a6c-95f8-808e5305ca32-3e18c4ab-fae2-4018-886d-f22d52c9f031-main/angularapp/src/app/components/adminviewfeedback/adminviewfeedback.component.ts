@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { FeedbackService } from '../../services/feedback.service';
 import { Feedback } from '../../models/feedback.model';
@@ -13,6 +14,8 @@ import Swal from 'sweetalert2';
 export class AdminviewfeedbackComponent implements OnInit {
  
   public apiUrl = apiUrl;
+  agentResult: string = '';
+  aiLoading: boolean = false;
   feedbacks: Feedback[] = [];
   filteredFeedbacks: Feedback[] = [];
   loading: boolean = true;
@@ -158,4 +161,22 @@ export class AdminviewfeedbackComponent implements OnInit {
     this.showProfileModal = false;
     this.selectedProfile = null;
   }
+  generateAgentInsights() {
+  this.aiLoading = true;
+  this.agentResult = '';
+
+  this.feedbackService.generateAgentInsight().subscribe({
+    next: (res) => {
+      this.agentResult = res;
+      this.aiLoading = false;
+    },
+    error: (err) => {
+      console.error(err);
+      this.agentResult = "⚠️ AI failed. Please try again.";
+      this.aiLoading = false;
+    }
+  });
+}
+
+  
 }

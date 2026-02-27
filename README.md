@@ -3,8 +3,9 @@
 
 Modern, responsive entry point showcasing platform overview and navigation.
 
-![Landing Page](<img width="1600" height="698" alt="image" src="https://github.com/user-attachments/assets/234fe870-bb5b-49ff-9124-a5a2c1e7953f" />
-)
+![Landing Page]
+<img width="1600" height="698" alt="image" src="https://github.com/user-attachments/assets/0ffe434b-4018-41b4-97e7-3d13ef2b8823" />
+
 🔐 User Authentication
 📝 Register Page
 

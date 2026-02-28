@@ -1,5 +1,6 @@
 # Cooking-Hub-Platform
-#Tech Stack: ASP .NET CORE, ANGULAR, MSSQL
+Tech Stack: ASP .NET CORE, ANGULAR, MSSQL
+
 🏠 Landing Page
 
 Modern, responsive entry point showcasing platform overview and navigation.
